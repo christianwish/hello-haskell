@@ -2,6 +2,13 @@ module Main where
 
 import Control.Monad
 import Happstack.Server (nullConf, simpleHTTP, ok, dir)
+import System.IO
+import System.Log.Handler.Simple
+import System.Log.Logger ( updateGlobalLogger
+                         , rootLoggerName
+                         , setLevel
+                         , Priority(..)
+                         )
 
 endPoints = [
         dir "hello" $ dir "exellio" $ ok "Hello Exellio!"
@@ -10,4 +17,6 @@ endPoints = [
       ]
 
 main :: IO ()
-main = simpleHTTP nullConf $ msum endPoints
+main = do
+  updateGlobalLogger rootLoggerName (setLevel INFO)
+  simpleHTTP nullConf $ msum endPoints
